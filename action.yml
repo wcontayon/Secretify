@@ -1,0 +1,31 @@
+name: "Secretify"
+description:
+  "Secretify your settings files, by replacing the values of the secrets with the actual values,
+  from your github secrets and varibales."
+author: "Comlan William CONTAYON - Avanade"
+
+inputs:
+  path-file:
+    description: "Path to the file to secretify"
+    required: true
+  path-output:
+    description: "Path to the output file"
+    required: false
+    default: ""
+  match-gihtub-secrets:
+    description: "Use secrets keys name and value from your gihtub context"
+    required: false
+    type: boolean
+    default: true
+  secrets-keys:
+    description: "Keys of the secrets to replace by their values in the file. Required when match-gihtub-secrets is false"
+    required: false
+    default: ""
+  secrets-values:
+    description: "Values of the secrets to replace by their values in the file. Required when match-gihtub-secrets is false"
+    required: false
+    default: ""
+
+runs:
+  using: "node18"
+  main: "dist/index.js"
