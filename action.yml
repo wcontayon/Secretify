@@ -9,7 +9,7 @@ inputs:
     description: "Path to the file to secretify"
     required: true
   path-output:
-    description: "Path to the output file"
+    description: "Path to the output file. If not provided, the output will be the same as the input file"
     required: false
     default: ""
   match-gihtub-secrets:
@@ -25,7 +25,11 @@ inputs:
     description: "Values of the secrets to replace by their values in the file. Required when match-gihtub-secrets is false"
     required: false
     default: ""
-
+  throw-if-not-found:
+    description: "Throw an error if a secret/or file is not found"
+    required: false
+    type: boolean
+    default: false
 runs:
   using: "node20"
   main: "lib/index.js"
