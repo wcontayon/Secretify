@@ -4,7 +4,7 @@ import fs from "fs";
 import { exit } from "process";
 
 // Run the main function after all the inputs are retrieved and validated
-export function run(
+export async function run(
   options: OptionsModel,
   githubToken: string,
   githubContext: Context
@@ -12,7 +12,7 @@ export function run(
   let fileContent = "";
   try {
     console.log("Reading file...");
-    fileContent = fs.readFileSync(options.pathFile!, "utf8");
+    fileContent = await fs.readFileSync(options.pathFile!, "utf8");
   } catch (error) {
     if (options.throwIfNotFound) {
       console.error("Error: ", error);
@@ -24,8 +24,33 @@ export function run(
     }
   }
 
-  // retrieve secrets from github context
-  console.log("Retrieving secrets from github context...");
-  console.log("githubContext: ", githubContext);
-  console.log("githubContext.payload: ", githubContext.payload);
+  if (options.matchGithubSecrets) {
+    console.log("Matching github secrets...");
+
+    // retrieve secrets from github context
+    console.log("Retrieving secrets from github context...");
+    console.log("githubContext: ", githubContext);
+    console.log("githubContext.payload: ", githubContext.payload);
+  } else {
+    console.log("Matching secrets from inputs...");
+    options.secretsKeys?.forEach((key, index) => {
+      console.log(`Replacing ${key} with ${options.secretsValues![index]}`);
+      fileContent = fileContent.replace(
+        new RegExp(key, "g"),
+        options.secretsValues![index]
+      );
+    });
+
+    if (options.showOutPutFileContextDebug) {
+      console.log("fileContent: ", fileContent);
+    }
+
+    console.log("Writing output file...");
+    await fs.writeFileSync(
+      options.pathOutput ?? options.pathFile!,
+      fileContent
+    );
+
+    exit(0);
+  }
 }

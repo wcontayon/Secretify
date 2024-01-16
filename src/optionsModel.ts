@@ -7,6 +7,7 @@ export class OptionsModel {
   secretsKeys?: string[];
   secretsValues?: string[];
   throwIfNotFound?: boolean;
+  showOutPutFileContextDebug?: boolean;
 
   constructor() {
     this.pathFile = "";
@@ -25,6 +26,7 @@ export class OptionsModel {
     options.secretsKeys = getInput("secrets-keys").split(",");
     options.secretsValues = getInput("secrets-values").split(",");
     options.throwIfNotFound = getInput("throw-if-not-found") === "true";
+    options.showOutPutFileContextDebug = getInput("show-output") === "true";
 
     return options;
   }

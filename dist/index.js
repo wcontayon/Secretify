@@ -1,58 +1,59 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 4822:
+/***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __nccwpck_require__(5438);
-const optionsModel_1 = __nccwpck_require__(3817);
-const fs = __importStar(__nccwpck_require__(7147));
-// Retrieve and validate inputs values
-console.log("Retrieving and validating inputs values...");
-let options = optionsModel_1.OptionsModel.fetchActionInputs();
-optionsModel_1.OptionsModel.validate(options);
-// Read file
-console.log("Reading file...");
-try {
-    let content = fs.readFileSync(options.pathFile, "utf8");
-    console.log("Content: ", content);
-}
-catch (err) {
-    console.error("Error: ", err);
-    if (options.throwIfNotFound) {
-        throw err;
+exports.run = void 0;
+const fs_1 = __importDefault(__nccwpck_require__(7147));
+const process_1 = __nccwpck_require__(7282);
+// Run the main function after all the inputs are retrieved and validated
+async function run(options, githubToken, githubContext) {
+    var _a, _b;
+    let fileContent = "";
+    try {
+        console.log("Reading file...");
+        fileContent = await fs_1.default.readFileSync(options.pathFile, "utf8");
+    }
+    catch (error) {
+        if (options.throwIfNotFound) {
+            console.error("Error: ", error);
+            throw new Error(`File not found: ${options.pathFile}`);
+        }
+        else {
+            console.warn("File not found: ", options.pathFile);
+            console.log("action will stop here");
+            (0, process_1.exit)(-1);
+        }
+    }
+    if (options.matchGithubSecrets) {
+        console.log("Matching github secrets...");
+        // retrieve secrets from github context
+        console.log("Retrieving secrets from github context...");
+        console.log("githubContext: ", githubContext);
+        console.log("githubContext.payload: ", githubContext.payload);
+    }
+    else {
+        console.log("Matching secrets from inputs...");
+        (_a = options.secretsKeys) === null || _a === void 0 ? void 0 : _a.forEach((key, index) => {
+            console.log(`Replacing ${key} with ${options.secretsValues[index]}`);
+            fileContent = fileContent.replace(new RegExp(key, "g"), options.secretsValues[index]);
+        });
+        if (options.showOutPutFileContextDebug) {
+            console.log("fileContent: ", fileContent);
+        }
+        console.log("Writing output file...");
+        await fs_1.default.writeFileSync((_b = options.pathOutput) !== null && _b !== void 0 ? _b : options.pathFile, fileContent);
+        (0, process_1.exit)(0);
     }
 }
-let content = fs.readFileSync(options.pathFile, "utf8");
-console.log("Content: ", content);
-console.log("Context: ", github_1.context);
-console.log("Hello World!");
+exports.run = run;
 
 
 /***/ }),
@@ -81,6 +82,7 @@ class OptionsModel {
         options.secretsKeys = (0, core_1.getInput)("secrets-keys").split(",");
         options.secretsValues = (0, core_1.getInput)("secrets-values").split(",");
         options.throwIfNotFound = (0, core_1.getInput)("throw-if-not-found") === "true";
+        options.showOutPutFileContextDebug = (0, core_1.getInput)("show-output") === "true";
         return options;
     }
     static validate(options) {
@@ -29154,6 +29156,14 @@ module.exports = require("perf_hooks");
 
 /***/ }),
 
+/***/ 7282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
+
+/***/ }),
+
 /***/ 3477:
 /***/ ((module) => {
 
@@ -30891,12 +30901,26 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(4822);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const github_1 = __nccwpck_require__(5438);
+const optionsModel_1 = __nccwpck_require__(3817);
+const main_1 = __nccwpck_require__(3109);
+// Retrieve and validate inputs values
+console.log("Retrieving and validating inputs values...");
+let options = optionsModel_1.OptionsModel.fetchActionInputs();
+optionsModel_1.OptionsModel.validate(options);
+// Run the main function after all the inputs are retrieved and validated
+(0, main_1.run)(options, (0, core_1.getInput)("github-token"), github_1.context);
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
