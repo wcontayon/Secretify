@@ -27,5 +27,5 @@ inputs:
     default: ""
 
 runs:
-  using: "node18"
-  main: "dist/index.js"
+  using: "node20"
+  main: "lib/index.js"
