@@ -1,8 +1,12 @@
 name: "Secretify"
 description:
-  "Secretify your settings files, by replacing the values of the secrets with the actual values,
-  from your github secrets and varibales."
-author: "Comlan William CONTAYON - Avanade"
+  "Secretify your settings/config files, by replacing the values of the secrets with the actual values,
+  from your github secrets and varibales, or from an array of keys and values."
+author: "Comlan William CONTAYON"
+
+branding:
+  icon: "aperture"
+  color: "gray-dark"
 
 inputs:
   path-file:

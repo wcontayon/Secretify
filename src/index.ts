@@ -1,7 +1,6 @@
 import { getInput } from "@actions/core";
 import { context } from "@actions/github";
 import { OptionsModel } from "./optionsModel";
-import * as fs from "fs";
 import { run } from "./main";
 
 // Retrieve and validate inputs values
