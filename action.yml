@@ -1,7 +1,6 @@
 name: "Secretify"
 description:
-  "Secretify your settings/config files, by replacing the values of the secrets with the actual values,
-  from your github secrets and varibales, or from an array of keys and values."
+  "Secretify your settings/config files, by replacing the values of the secrets with values"
 author: "Comlan William CONTAYON"
 
 branding:
