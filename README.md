@@ -23,7 +23,8 @@ jobs:
         steps:
         - uses: actions/checkout@v2
         - name: Secretify settings files
-            uses: wcontayon/secretify-action@latest
+        - name: secretify-action
+          uses: wcontayon/Secretify@vlatest
             with:
                 path-file: "-- path to your settings/config files --"
                 secrets-keys: "__key1__,__key2__,__key3__"
