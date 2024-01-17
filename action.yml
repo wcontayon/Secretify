@@ -1,4 +1,4 @@
-name: "Secretify"
+name: "secretify"
 description:
   "Secretify your settings/config files, by replacing the values of the secrets with values"
 author: "Comlan William CONTAYON"
