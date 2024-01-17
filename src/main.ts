@@ -46,10 +46,9 @@ export async function run(
     }
 
     console.log("Writing output file...");
-    await fs.writeFileSync(
-      options.pathOutput ?? options.pathFile!,
-      fileContent
-    );
+    if (!options.pathOutput)
+      await fs.writeFileSync(options.pathFile!, fileContent);
+    else await fs.writeFileSync(options.pathOutput, fileContent);
 
     exit(0);
   }

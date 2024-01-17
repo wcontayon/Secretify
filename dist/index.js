@@ -15,7 +15,7 @@ const fs_1 = __importDefault(__nccwpck_require__(7147));
 const process_1 = __nccwpck_require__(7282);
 // Run the main function after all the inputs are retrieved and validated
 async function run(options, githubToken, githubContext) {
-    var _a, _b;
+    var _a;
     let fileContent = "";
     try {
         console.log("Reading file...");
@@ -49,7 +49,10 @@ async function run(options, githubToken, githubContext) {
             console.log("fileContent: ", fileContent);
         }
         console.log("Writing output file...");
-        await fs_1.default.writeFileSync((_b = options.pathOutput) !== null && _b !== void 0 ? _b : options.pathFile, fileContent);
+        if (!options.pathOutput)
+            await fs_1.default.writeFileSync(options.pathFile, fileContent);
+        else
+            await fs_1.default.writeFileSync(options.pathOutput, fileContent);
         (0, process_1.exit)(0);
     }
 }
